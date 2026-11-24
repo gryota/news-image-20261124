@@ -1,27 +1,39 @@
 #!/usr/bin/env python3
-"""news-image-20261124 entrypoint: copy the pre-rendered poster to /output.
+"""Entrypoint for the 24 November 2026 news-image entry.
 
-The poster (entry.png, 1024x1024, "The World in One Day", Tuesday
-24 November 2026) was drawn from scratch with Python + Pillow by
-draw_poster.py; the grader runs standard library only, so this entrypoint
-just copies the finished image byte-for-byte. Fully deterministic: every
-run writes the same bytes.
+The artwork is already finished: entry.png is a 1024 by 1024 picture
+that sums up four verified stories from Tuesday 24 November 2026
+under the title "The World in One Day". Drawing it needed Pillow,
+which the grading sandbox does not install, so this script draws
+nothing at all. It only places the finished picture into the folder
+the grader points at, byte for byte, which is fully deterministic.
 
-Run:  mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
+Run it as: MAKEFUN_OUTPUT_DIR=out python3 main.py
 """
 
+from pathlib import Path
 import os
-import shutil
 
 
-# The image is shipped in the repository; nothing is generated at run time,
-# so the run needs no third-party package and no network.
-def main():
-    here = os.path.dirname(os.path.abspath(__file__))
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(out_dir, exist_ok=True)
-    shutil.copyfile(os.path.join(here, "entry.png"),
-                    os.path.join(out_dir, "entry.png"))
+POSTER_NAME = "entry.png"
+
+
+def poster_path() -> Path:
+    """Absolute path of the poster shipped beside this script."""
+    return Path(__file__).resolve().parent / POSTER_NAME
+
+
+def output_folder() -> Path:
+    """Folder the grader asks for, falling back to /output."""
+    requested = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
+    return Path(requested)
+
+
+def main() -> None:
+    folder = output_folder()
+    folder.mkdir(parents=True, exist_ok=True)
+    picture_bytes = poster_path().read_bytes()
+    (folder / POSTER_NAME).write_bytes(picture_bytes)
 
 
 if __name__ == "__main__":

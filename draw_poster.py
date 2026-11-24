@@ -12,6 +12,18 @@ grader runs standard library only, so no Pillow at run time.
 Run:  mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 draw_poster.py
 """
 
+# How the four stories are laid out (top to bottom, two rows of two):
+#  - Row one, left: the chipmaker chief is restored after the White
+#    House steps in, drawn as a gold chip with a rising arrow.
+#  - Row one, right: the Singapore chip broker is blacklisted, drawn
+#    as a chip under a red prohibition stamp.
+#  - Row two, left: the Gulf standoff over a mined tanker, drawn with
+#    a red banner carrying the damages figure.
+#  - Row two, right: jets crossing an air-defence zone, drawn with a
+#    radar sweep and a warning triangle.
+# Headline text is wrapped to two lines and the standfirst to three,
+# so no story overflows its card whatever the wording.
+
 import math
 import os
 
